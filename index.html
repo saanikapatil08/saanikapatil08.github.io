@@ -174,15 +174,17 @@
     width: 220px; height: 220px;
     border-radius: 50%;
     background: var(--bg-2);
-    border: 2px solid var(--border);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 8px;
+    border: 3px solid var(--border);
     position: relative; overflow: hidden;
+    box-shadow: 0 4px 24px rgba(42,82,160,0.10);
   }
 
-  .photo-frame svg { opacity: 0.3; }
-  .photo-hint { font-size: 0.75rem; color: var(--ink-3); }
+  .photo-frame img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
 
   .hero-stats {
     display: flex; gap: 1.5rem;
@@ -612,8 +614,7 @@
       </div>
       <div class="photo-wrap fade-up" style="transition-delay: 0.15s;">
         <div class="photo-frame">
-          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span class="photo-hint">your photo here</span>
+          <img src="saanika-headshot.png" alt="Saanika Patil" />
         </div>
         <div class="hero-stats">
           <div class="stat"><span class="stat-num">3+</span><span class="stat-label">Yrs Exp</span></div>
@@ -865,22 +866,22 @@
       <h2>Let's connect.</h2>
       <p style="font-size:0.95rem; color:var(--ink-2); font-weight:300; margin-bottom:0.5rem;">I'm actively looking for full-time Data Science, AI/ML, and Risk roles starting May 2026. If you have an opportunity or just want to chat, I'd love to hear from you.</p>
       <div class="contact-links">
-        <a href="mailto:spatil08@terpmail.umd.edu" class="contact-item">
+        <a href="/cdn-cgi/l/email-protection#46353627322f2a767e06322334362b272f2a68332b2268232233" class="contact-item">
           <div class="contact-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2a52a0" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
           </div>
           <div>
             <div class="contact-label">Email</div>
-            <div class="contact-value">spatil08@terpmail.umd.edu</div>
+            <div class="contact-value"><span class="__cf_email__" data-cfemail="15666574617c79252d556170676578747c793b6078713b707160">[email&#160;protected]</span></div>
           </div>
         </a>
-        <a href="https://linkedin.com/in/saanika-patil" target="_blank" class="contact-item">
+        <a href="https://www.linkedin.com/in/saanikapatil/" target="_blank" class="contact-item">
           <div class="contact-icon">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="#2a52a0"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
           </div>
           <div>
             <div class="contact-label">LinkedIn</div>
-            <div class="contact-value">linkedin.com/in/saanika-patil</div>
+            <div class="contact-value">linkedin.com/in/saanikapatil</div>
           </div>
         </a>
         <a href="https://github.com/saanikapatil08" target="_blank" class="contact-item">
@@ -910,16 +911,6 @@
   <p>Designed & built by Saanika Patil · 2026</p>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-    }
-  });
-}, { threshold: 0.08 });
-
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+  entries
