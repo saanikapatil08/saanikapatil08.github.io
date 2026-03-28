@@ -6,7 +6,7 @@
 <title>Saanika Patil - Data Scientist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Homemade+Apple&family=Caveat:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Homemade+Apple&family=Caveat:wght@400;600&family=Pacifico&family=Dancing+Script:wght@700&family=Playfair+Display:ital@1&family=Sacramento&family=Lobster&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
   :root {
     --ink: #1a1a1a;
@@ -719,6 +719,22 @@
     .postcard-right { min-height: 200px; }
   }
 
+
+  /* ── NAME FONT CYCLE ── */
+  #name-cycle {
+    display: inline-block;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    color: var(--accent);
+  }
+  #name-cycle.fade-out {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  #name-cycle.fade-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   /* Typewriter cursor */
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
   .tw-cursor {
@@ -757,7 +773,7 @@
     <div class="hero-inner">
       <div class="hero-text fade-up">
         <div class="hero-eyebrow"><span></span>Available for full-time roles · May 2026</div>
-        <h1>Hi, I'm <em>Saanika</em>.<br>I translate numbers<br>into <em>ML models</em><br>that actually work.</h1>
+        <h1>Hi, I'm <em id="name-cycle">Saanika</em>.<br>I translate numbers<br>into <em>ML models</em><br>that actually work.</h1>
         <p class="hero-tagline">Data Scientist & ML Engineer with 3+ years transforming high-volume data into production-ready models — from time-series forecasting and causal inference to RAG pipelines and LLM systems built for regulated environments.</p>
         <p class="hero-bio">M.S. Data Science · University of Maryland &nbsp;·&nbsp; 3+ yrs industry experience at Infosys &nbsp;·&nbsp; Generative AI Intern at Centennial Technologies &nbsp;·&nbsp; Open to Data Science, AI/ML, and Risk roles</p>
         <div class="hero-ctas">
@@ -1071,7 +1087,8 @@
   <div class="postcard-section-inner">
     <div class="postcard-heading fade-up">
       <div class="section-label" style="justify-content: center;">A note from me</div>
-      <h2 style="text-align:center;">A postcard from<br><em>the journey.</em></h2>
+      <h2 class="thanks-heading" style="text-align:center; font-size: clamp(2rem, 5vw, 3.2rem); line-height:1.15; margin-bottom:0.5rem;">Thanks for scrolling all the way<br><em>to the end.</em></h2>
+      <p style="text-align:center; font-size:0.95rem; color:var(--ink-3); font-weight:300; margin-bottom:1rem;">Here's a little postcard from me to you.</p>
     </div>
 
     <div class="postcard-wrap" id="postcard-wrap">
@@ -1144,7 +1161,7 @@ const postcardWrap = document.getElementById('postcard-wrap');
 const postcardCaption = document.getElementById('postcard-caption');
 const twEl = document.getElementById('typewriter-text');
 
-const fullText = "I almost switched tracks after my first big model flopped,\nbut I'm so glad I kept showing up — every dataset,\nevery deadline, every late-night debug session. This is just the beginning. ✨";
+const fullText = "I almost switched tracks after my first big model flopped,\nbut I'm so glad I kept showing up — every dataset,\nevery deadline, every late-night debug session.\nThis is just the beginning. ✨";
 
 let twStarted = false;
 
@@ -1186,6 +1203,38 @@ const pcObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.2 });
 
 pcObserver.observe(postcardWrap);
+
+// ── Font-cycling "Saanika" in hero ──
+const nameFonts = [
+  { font: "'DM Serif Display', serif",        style: "italic",  size: null },
+  { font: "'Dancing Script', cursive",        style: "normal",  size: "1.05em" },
+  { font: "'Playfair Display', serif",        style: "italic",  size: null },
+  { font: "'Sacramento', cursive",            style: "normal",  size: "1.2em" },
+  { font: "'Lobster', cursive",               style: "normal",  size: null },
+  { font: "'Special Elite', cursive",         style: "normal",  size: "0.85em" },
+  { font: "'Pacifico', cursive",              style: "normal",  size: "0.9em" },
+  { font: "'Homemade Apple', cursive",        style: "normal",  size: "0.72em" },
+  { font: "'Caveat', cursive",                style: "normal",  size: "1.15em" },
+];
+
+const nameEl = document.getElementById('name-cycle');
+let nameIdx = 0;
+
+function cycleName() {
+  nameEl.classList.add('fade-out');
+  setTimeout(() => {
+    nameIdx = (nameIdx + 1) % nameFonts.length;
+    const f = nameFonts[nameIdx];
+    nameEl.style.fontFamily = f.font;
+    nameEl.style.fontStyle = f.style;
+    nameEl.style.fontSize = f.size || '';
+    nameEl.classList.remove('fade-out');
+    nameEl.classList.add('fade-in');
+  }, 260);
+}
+
+setInterval(cycleName, 1800);
+
 </script>
 </body>
 </html>
