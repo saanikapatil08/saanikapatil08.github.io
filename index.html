@@ -720,20 +720,37 @@
   }
 
 
-  /* ── NAME FONT CYCLE ── */
-  #name-cycle {
+  /* ── NAME TYPEWRITER ── */
+  #name-wrap {
     display: inline-block;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    /* Fixed height = h1 line-height so no font metric can shift surrounding lines */
+    height: 1.1em;
+    line-height: 1.1em;
+    overflow: visible;
+    vertical-align: bottom;
+    white-space: nowrap;
+  }
+  #name-cycle {
+    display: inline;
     color: var(--accent);
+    font-style: italic;
+    /* Lock line-height so ascenders/descenders can't push layout */
+    line-height: 1.1em;
+    vertical-align: baseline;
   }
-  #name-cycle.fade-out {
-    opacity: 0;
-    transform: translateY(-6px);
+  #name-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.72em;
+    background: var(--accent);
+    margin-left: 3px;
+    vertical-align: middle;
+    border-radius: 1px;
+    animation: nameBlink 0.75s step-end infinite;
+    position: relative;
+    top: -0.05em;
   }
-  #name-cycle.fade-in {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  @keyframes nameBlink { 0%,100%{opacity:1} 50%{opacity:0} }
 
   /* Typewriter cursor */
   @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
@@ -773,7 +790,7 @@
     <div class="hero-inner">
       <div class="hero-text fade-up">
         <div class="hero-eyebrow"><span></span>Available for full-time roles · May 2026</div>
-        <h1>Hi, I'm <em id="name-cycle">Saanika</em>.<br>I translate numbers<br>into <em>ML models</em><br>that actually work.</h1>
+        <h1>Hi, I'm <span id="name-wrap"><em id="name-cycle"></em><span id="name-cursor"></span></span>.<br>I translate numbers<br>into <em>ML models</em><br>that actually work.</h1>
         <p class="hero-tagline">Data Scientist & ML Engineer with 3+ years transforming high-volume data into production-ready models — from time-series forecasting and causal inference to RAG pipelines and LLM systems built for regulated environments.</p>
         <p class="hero-bio">M.S. Data Science · University of Maryland &nbsp;·&nbsp; 3+ yrs industry experience at Infosys &nbsp;·&nbsp; Generative AI Intern at Centennial Technologies &nbsp;·&nbsp; Open to Data Science, AI/ML, and Risk roles</p>
         <div class="hero-ctas">
@@ -1105,7 +1122,7 @@
           <div class="postcard-year">2026</div>
           <div class="postcard-label">Postcard</div>
           <div class="postcard-from">
-            From <span class="tomato">&#127813;</span>
+            From Saanika<span class="tomato">&#127813;</span>
           </div>
           <div class="postcard-date">May '26</div>
 
@@ -1123,7 +1140,7 @@
           <div class="postcard-stamp-row">
             <div class="postcard-stamp">
               <span class="stamp-flower">&#127846;</span>
-              <span class="stamp-text">DATA SCI</span>
+              <span class="stamp-text">UMD</span>
             </div>
           </div>
           <div class="postcard-lines">
@@ -1161,7 +1178,7 @@ const postcardWrap = document.getElementById('postcard-wrap');
 const postcardCaption = document.getElementById('postcard-caption');
 const twEl = document.getElementById('typewriter-text');
 
-const fullText = "I almost switched tracks after my first big model flopped,\nbut I'm so glad I kept showing up — every dataset,\nevery deadline, every late-night debug session.\nThis is just the beginning. ✨";
+const fullText = "I almost switched tracks after my first big model flopped,\nbut I'm so glad I kept showing up - every dataset,\nevery deadline, every late-night debug session.This is just the beginning.✨";
 
 let twStarted = false;
 
@@ -1204,36 +1221,74 @@ const pcObserver = new IntersectionObserver((entries) => {
 
 pcObserver.observe(postcardWrap);
 
-// ── Font-cycling "Saanika" in hero ──
+// ── Typewriter "Saanika" cycling through fonts ──
 const nameFonts = [
-  { font: "'DM Serif Display', serif",        style: "italic",  size: null },
-  { font: "'Dancing Script', cursive",        style: "normal",  size: "1.05em" },
-  { font: "'Playfair Display', serif",        style: "italic",  size: null },
-  { font: "'Sacramento', cursive",            style: "normal",  size: "1.2em" },
-  { font: "'Lobster', cursive",               style: "normal",  size: null },
-  { font: "'Special Elite', cursive",         style: "normal",  size: "0.85em" },
-  { font: "'Pacifico', cursive",              style: "normal",  size: "0.9em" },
-  { font: "'Homemade Apple', cursive",        style: "normal",  size: "0.72em" },
-  { font: "'Caveat', cursive",                style: "normal",  size: "1.15em" },
+  { font: "'DM Serif Display', serif",   style: "italic"  },
+  { font: "'Dancing Script', cursive",   style: "normal"  },
+  { font: "'Playfair Display', serif",   style: "italic"  },
+  { font: "'Sacramento', cursive",       style: "normal"  },
+  { font: "'Lobster', cursive",          style: "normal"  },
+  { font: "'Special Elite', cursive",    style: "normal"  },
+  { font: "'Pacifico', cursive",         style: "normal"  },
+  { font: "'Homemade Apple', cursive",   style: "normal"  },
+  { font: "'Caveat', cursive",           style: "normal"  },
 ];
 
 const nameEl = document.getElementById('name-cycle');
+const nameCursor = document.getElementById('name-cursor');
+const nameWord = "Saanika";
 let nameIdx = 0;
+let nameRunning = false;
 
-function cycleName() {
-  nameEl.classList.add('fade-out');
-  setTimeout(() => {
-    nameIdx = (nameIdx + 1) % nameFonts.length;
-    const f = nameFonts[nameIdx];
-    nameEl.style.fontFamily = f.font;
-    nameEl.style.fontStyle = f.style;
-    nameEl.style.fontSize = f.size || '';
-    nameEl.classList.remove('fade-out');
-    nameEl.classList.add('fade-in');
-  }, 260);
+function typeNameChar(text, i, el, cb) {
+  if (i <= text.length) {
+    el.textContent = text.slice(0, i);
+    setTimeout(() => typeNameChar(text, i + 1, el, cb), 90);
+  } else {
+    cb();
+  }
 }
 
-setInterval(cycleName, 1800);
+function deleteNameChar(el, cb) {
+  const cur = el.textContent;
+  if (cur.length === 0) { cb(); return; }
+  el.textContent = cur.slice(0, -1);
+  setTimeout(() => deleteNameChar(el, cb), 55);
+}
+
+function runNameCycle() {
+  if (nameRunning) return;
+  nameRunning = true;
+
+  function loop() {
+    // pause fully typed, then delete
+    setTimeout(() => {
+      deleteNameChar(nameEl, () => {
+        // switch font
+        nameIdx = (nameIdx + 1) % nameFonts.length;
+        const f = nameFonts[nameIdx];
+        nameEl.style.fontFamily = f.font;
+        nameEl.style.fontStyle = f.style;
+        // pause briefly then type
+        setTimeout(() => {
+          typeNameChar(nameWord, 0, nameEl, () => {
+            loop();
+          });
+        }, 220);
+      });
+    }, 1800);
+  }
+
+  // initial type-in on load
+  nameEl.textContent = "";
+  const f0 = nameFonts[0];
+  nameEl.style.fontFamily = f0.font;
+  nameEl.style.fontStyle = f0.style;
+  typeNameChar(nameWord, 0, nameEl, () => { loop(); });
+}
+
+// Start after a short delay so page loads first
+setTimeout(runNameCycle, 600);
 
 </script>
 </body>
