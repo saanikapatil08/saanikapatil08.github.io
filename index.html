@@ -934,40 +934,40 @@
       <div class="section-label" style="justify-content: center;">A note from me</div>
       <h2 style="text-align:center;">A postcard from<br><em>the journey.</em></h2>
     </div>
- 
+
     <div class="postcard-wrap" id="postcard-wrap">
       <div class="postcard" id="postcard-card">
         <div class="postcard-dots"></div>
- 
+
         <!-- Left side: From / date / label -->
         <div class="postcard-left">
           <!-- Star top-right decoration -->
           <svg class="postcard-star" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M14 2L16.5 11.5H26L18.5 17.5L21 27L14 21L7 27L9.5 17.5L2 11.5H11.5L14 2Z" fill="#c5bca8"/>
           </svg>
- 
+
           <div class="postcard-year">2026</div>
-          <div class="postcard-label">Postcard</div>
+          <div class="postcard-label">✦ Postcard ✦</div>
           <div class="postcard-from">
-            From <span class="tomato">&#127813;</span>
+            From Saanika <span class="tomato">&#127813;</span>
           </div>
           <div class="postcard-date">May '26</div>
- 
+
           <!-- Star bottom decoration -->
           <svg class="postcard-star-bottom" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M11 1L13 8.5H21L14.5 13.5L16.5 21L11 16.5L5.5 21L7.5 13.5L1 8.5H9L11 1Z" fill="#d4b8e0" opacity="0.7"/>
           </svg>
         </div>
- 
+
         <!-- Divider -->
         <div class="postcard-divider"></div>
- 
+
         <!-- Right side: Stamp + address lines + handwritten message -->
         <div class="postcard-right">
           <div class="postcard-stamp-row">
             <div class="postcard-stamp">
               <span class="stamp-flower">&#127846;</span>
-              <span class="stamp-text">DATA SCI</span>
+              <span class="stamp-text">UMD</span>
             </div>
           </div>
           <div class="postcard-lines">
@@ -978,18 +978,19 @@
           </div>
           <div class="postcard-message">
             I almost switched tracks after my first big model flopped,<br>
-            but I'm so glad I kept showing up — every dataset,<br>
+            but I'm so glad I kept showing up - every dataset,<br>
             every deadline, every late-night debug session.<br>
             This is just the beginning. &#10024;
           </div>
         </div>
       </div>
     </div>
- 
+
     <p class="postcard-caption" id="postcard-caption">save this · share it · let's build something together</p>
+    <h2 class="pc-closing-h">Thanks for scrolling all the way<br><em>to the end.</em></h2>
   </div>
 </section>
- 
+
 <footer>
   <p>Designed & built by Saanika Patil · 2026</p>
 </footer>
@@ -1004,6 +1005,24 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.08 });
 
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Postcard reveal
+const postcardWrap = document.getElementById('postcard-wrap');
+const postcardCaption = document.getElementById('postcard-caption');
+
+const pcObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      setTimeout(() => {
+        postcardWrap.classList.add('visible');
+        setTimeout(() => postcardCaption.classList.add('visible'), 600);
+      }, 150);
+      pcObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+pcObserver.observe(postcardWrap);
 </script>
 </body>
 </html>
